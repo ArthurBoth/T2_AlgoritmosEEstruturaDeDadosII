@@ -4,7 +4,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 public class Navegacao {
     Grafo grafo;
@@ -30,7 +29,8 @@ public class Navegacao {
             }
             geraGrafo(matriz,altura,largura);
             debugPrintMap(matriz);
-           // debugPrintGraph();
+            debugPrintGraph();
+            debugPrintPositions(altura,largura);
         }
         catch (IOException e) {
             System.err.format("Erro");
@@ -47,11 +47,11 @@ public class Navegacao {
                     v1 = ((i * largura) + j); // posição do vérice atual no grafo
 
                     if ((i>0) && (matriz[i-1][j] != '*')){ // verifica a posição de cima do vértice atual
-                        v2 = ((i - 1) + j);
+                        v2 = (((i - 1) * largura)+ j);
                         grafo.addAdj(v1,v2);
                     }
                     if ((i<altura-1) && (matriz[i+1][j] != '*')){ // verifica a posição de baixo do vértice atual
-                        v2 = ((i + 1) + j);
+                        v2 = (((i + 1) * largura) + j);
                         grafo.addAdj(v1,v2);
                     }
                     if ((j>0) && (matriz[i][j-1] != '*')){ // verifica a posição à esquerda do vértice atual
@@ -59,7 +59,7 @@ public class Navegacao {
                         grafo.addAdj(v1,v2);
                     }
                     if ((j<largura-1) && (matriz[i][j+1] != '*')){ // verifica a posição à direita do vértice atual
-                        v2 = ((i * largura) + j - 1);
+                        v2 = ((i * largura) + j + 1);
                         grafo.addAdj(v1,v2);
                     }
 
@@ -85,9 +85,19 @@ public class Navegacao {
         System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
     }
     private void debugPrintGraph(){
-        System.out.println("--------------------------DEBUG GRAFO--------------------------");
-
-        System.out.println("--------------------------DEBUG GRAFO--------------------------");
+        System.out.println("--------------------------DEBUG - PRINT - GRAFO-------------------------");
+        System.out.println(grafo.toString());
+        System.out.println("--------------------------DEBUG - PRINT - GRAFO-------------------------");
+    }
+    private void debugPrintPositions(int altura, int largura){
+        System.out.println("--------------------------DEBUG - PRINT - POSIÇÕES----------------------");
+        for (int i=0;i<altura;i++){
+            for (int j=0;j<largura;j++){
+                System.out.print((i*largura+j) + " ");
+            }
+            System.out.print("\n");
+        }
+        System.out.println("--------------------------DEBUG - PRINT - POSIÇÕES----------------------");
     }
 }
 
