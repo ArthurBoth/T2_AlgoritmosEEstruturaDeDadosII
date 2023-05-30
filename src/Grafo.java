@@ -33,9 +33,10 @@ public class Grafo {
 
     @Override
     public String toString() {
+        String retorno = "";
         List<Integer> aux;
         StringBuilder s = new StringBuilder();
-        for (Integer i: lista.keySet()){
+        for (Integer i : lista.keySet()){
             StringBuilder l= new StringBuilder("[ ");
             aux = lista.get(i);
             for (Integer j: aux){
@@ -44,6 +45,17 @@ public class Grafo {
             l.append("]");
             s.append("Posição: ").append(i).append(" - Lista: ").append(l).append("\n");
         }
-        return s.toString();
+
+        s.append("\n---Portos---\n");
+
+        for (int i=1;i<10;i++) {
+            if (portos[i] != null){
+                s.append("Porto: ").append(i).append(" - ").append(lista.get(portos[i])).append("\n");
+                if (portos[i+1] == null){
+                    retorno = s.substring(0,s.length()-1);
+                }
+            }
+        }
+        return retorno;
     }
 }
