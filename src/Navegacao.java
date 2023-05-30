@@ -7,8 +7,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Navegacao {
-    Vertice[] grafo;
+    Grafo grafo;
     public Navegacao() {
+        grafo = new Grafo();
     }
     
     public void start(String arquivo){
@@ -25,11 +26,11 @@ public class Navegacao {
             char[][] matriz = new char[altura][largura];
             for (int i = 0; i<altura; i++){
                 line = reader.readLine();
-                //System.out.println(line);
                 matriz[i] = line.toCharArray();
             }
-
             geraGrafo(matriz,altura,largura);
+            debugPrintMap(matriz);
+           // debugPrintGraph();
         }
         catch (IOException e) {
             System.err.format("Erro");
@@ -37,70 +38,56 @@ public class Navegacao {
     }
 
     private void geraGrafo(char[][] matriz, int altura, int largura){
-        Vertice v1;
-        Vertice v2;
-        ArrayList<Vertice> arrayList = new ArrayList<>();
-        for (int i=0;i<altura;i++){
-            for (int j=0;j<largura;j++){
-                char c = matriz[i][j];
+        int v1;
+        int v2;
 
-                // gera um vértice do grafo
-                if (c != '*') { // se for um espaço não navegável, não é um vértice do grafo
-                    if (c == '.'){ // verifica se é um porto ou não
-                        v1 = new Vertice(false); // se não for um porto
+        for(int i=0;i<altura;i++){
+            for(int j=0;j<largura;j++){
+                if (matriz[i][j] != '*'){
+                    v1 = ((i * largura) + j); // posição do vérice atual no grafo
+
+                    if ((i>0) && (matriz[i-1][j] != '*')){ // verifica a posição de cima do vértice atual
+                        v2 = ((i - 1) + j);
+                        grafo.addAdj(v1,v2);
                     }
-                    else {
-                        v1 = new Vertice(true,Integer.parseInt("" + c)); // se for um porto
+                    if ((i<altura-1) && (matriz[i+1][j] != '*')){ // verifica a posição de baixo do vértice atual
+                        v2 = ((i + 1) + j);
+                        grafo.addAdj(v1,v2);
+                    }
+                    if ((j>0) && (matriz[i][j-1] != '*')){ // verifica a posição à esquerda do vértice atual
+                        v2 = ((i * largura) + j - 1);
+                        grafo.addAdj(v1,v2);
+                    }
+                    if ((j<largura-1) && (matriz[i][j+1] != '*')){ // verifica a posição à direita do vértice atual
+                        v2 = ((i * largura) + j - 1);
+                        grafo.addAdj(v1,v2);
                     }
 
-                    if (i>0){ // verifica se tem uma posição acima do vértice
-                        if (matriz[i-1][j] != '*') { // se for um espaço não navegável, não é um vértice do grafo
-                            if (matriz[i-1][j] == '.'){ // verifica se é um porto ou não
-                                v2 = new Vertice(false); // se não for um porto
-                            }
-                            else {
-                                v2 = new Vertice(true,Integer.parseInt("" + matriz[i-1][j])); // se for um porto
-                            }
-                            v1.addEdge(v2); // adiciona a aresta ao vértice
-                        }
+
+                    // depois das asjacências do vértice terem sido adicionadas
+                    if (matriz[i][j] != '.'){ // verifica se o vértice em sí é um porto
+                        // guara o valor númerico, pois 'matriz' armazena um char
+                        int porto = Character.getNumericValue(matriz[i][j]);
+                        grafo.portos[porto] = v1;
                     }
-                    if (j>0){ // verifica se tem uma posição à esquerda do vértice
-                        if (matriz[i][j-1] != '*') { // se for um espaço não navegável, não é um vértice do grafo
-                            if (matriz[i][j-1] == '.'){ // verifica se é um porto ou não
-                                v2 = new Vertice(false); // se não for um porto
-                            }
-                            else {
-                                v2 = new Vertice(true,Integer.parseInt("" + matriz[i][j-1])); // se for um porto
-                            }
-                            v1.addEdge(v2); // adiciona a aresta ao vértice
-                        }
-                    }
-                    if (i+1>altura){ // verifica se tem uma posição abaixo do vértice
-                        if (matriz[i+1][j] != '*') { // se for um espaço não navegável, não é um vértice do grafo
-                            if (matriz[i+1][j] == '.'){ // verifica se é um porto ou não
-                                v2 = new Vertice(false); // se não for um porto
-                            }
-                            else {
-                                v2 = new Vertice(true,Integer.parseInt("" + matriz[i+1][j])); // se for um porto
-                            }
-                            v1.addEdge(v2); // adiciona a aresta ao vértice
-                        }
-                    }
-                    if (j+1>largura){ // verifica se tem uma posição à direita do vértice
-                        if (matriz[i][j+1] != '*') { // se for um espaço não navegável, não é um vértice do grafo
-                            if (matriz[i][j+1] == '.'){ // verifica se é um porto ou não
-                                v2 = new Vertice(false); // se não for um porto
-                            }
-                            else {
-                                v2 = new Vertice(true,Integer.parseInt("" + matriz[i][j+1])); // se for um porto
-                            }
-                            v1.addEdge(v2); // adiciona a aresta ao vértice
-                        }
-                    }
-                    arrayList.add(v1); // adiciona o vértice ao grafo
                 }
             }
         }
-        grafo = arrayList.toArray(new Vertice[0]);
+    }
+    private void debugPrintMap(char[][] matriz){
+        System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
+        for (char[] i: matriz){
+            for (char j : i){
+                System.out.print(j);
+            }
+            System.out.print("\n");
+        }
+        System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
+    }
+    private void debugPrintGraph(){
+        System.out.println("--------------------------DEBUG GRAFO--------------------------");
+
+        System.out.println("--------------------------DEBUG GRAFO--------------------------");
     }
 }
+
