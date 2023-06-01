@@ -1,12 +1,14 @@
 import java.util.*;
 
 public class Grafo {
+    private final int size; // armazena o tamanho do mapa
     private final HashMap<Integer, List<Integer>> lista; // lista de adjacências
-    public final Integer[] portos; // guarda a posição dos portos no mapa
+    public final int[] portos; // guarda a posição dos portos no mapa
 
-    public Grafo(){
+    public Grafo(int altura, int largura){
         lista = new HashMap<>();
-        portos = new Integer[10]; // a posição 0 nunca será utilizada
+        portos = new int[10]; // a posição 0 nunca será utilizada
+        size = altura*largura;
     }
 
     /**
@@ -31,9 +33,56 @@ public class Grafo {
         */
     }
 
+    /**
+     * Calcula a distância de um vértice qualquer para um porto utilizando o algoritmo de busca em largura
+     * @param start é o vértice inicial de cálculo à distância
+     * @return é um array com as ditâcias até cada porto (a distância é -1 se o vértice for 
+     * inalcançável a partir do vértice inicial)
+     */
+    public int[] bfsDisPortos(int start){
+        int [] distancias = bfsDisTotal(start); // a distância de 'start' a todos os vértices alcançáveis
+        int [] retorno = new int[10]; // arrays de int inicializam com '0' em todas as posições
+        Arrays.fill(retorno,-1);
+
+        for (int i=1;i<10;i++){
+            retorno[i] = distancias[portos[i]]; // salva as distâncias certas no array
+        }
+
+        return retorno;
+    }
+
+    /**
+     * Calcula a distância de um vértice do grafo para todos os outros utilizando o algoritmo de busca em largura
+     * @param start é o vértice inicial de cálculo à distância
+     * @return é um array com todas as distâncias do vértice inicial
+     */
+    private int[] bfsDisTotal(int start){
+        boolean[] visitado = new boolean[size]; // arrays de boolean se inicializam com false
+        int[] distancia = new int[size]; // distância para cada um dos portos
+        Queue<Integer> fila = new LinkedList<>();
+
+         // altera a distância para um número inválido, assim, vértices inalcançáveis têm distância '-1'
+        Arrays.fill(distancia, -1);
+
+        fila.add(start);
+        visitado[start] = true;
+        distancia[start] = 0;
+
+        while (!(fila.isEmpty())){ // enquanto a fila não estiver vazia
+            int v = fila.poll(); // remove o vértice visitado
+            for (int w : lista.get(v)){ // para cada vértice adjacente que start tem
+                if (!(visitado[w])){ // verifica se não tiver visitado o adjacente ainda
+                    fila.add(w); // adiciona à fila para visitar no futuro
+                    visitado[w] = true;
+                    distancia[w] = distancia[v] + 1;
+                }
+            }
+        }
+        return distancia;
+    }
+
     @Override
     public String toString() {
-        String retorno = "";
         List<Integer> aux;
         StringBuilder s = new StringBuilder();
         for (Integer i : lista.keySet()){
@@ -46,16 +95,7 @@ public class Grafo {
             s.append("Posição: ").append(i).append(" - Lista: ").append(l).append("\n");
         }
 
-        s.append("\n---Portos---\n");
-
-        for (int i=1;i<10;i++) {
-            if (portos[i] != null){
-                s.append("Porto: ").append(i).append(" - ").append(lista.get(portos[i])).append("\n");
-                if (portos[i+1] == null){
-                    retorno = s.substring(0,s.length()-1);
-                }
-            }
-        }
-        return retorno;
+        s.append("\nNúmero de Vértices: ").append(lista.size());
+        return s.toString();
     }
 }
