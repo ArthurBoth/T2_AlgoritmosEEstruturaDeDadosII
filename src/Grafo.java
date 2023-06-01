@@ -1,14 +1,18 @@
 import java.util.*;
 
 public class Grafo {
+
+    private final int numPortos;
     private final int size; // armazena o tamanho do mapa
     private final HashMap<Integer, List<Integer>> lista; // lista de adjacências
     public final int[] portos; // guarda a posição dos portos no mapa
 
-    public Grafo(int altura, int largura){
+    public Grafo(int altura, int largura, int numPortos){
         lista = new HashMap<>();
-        portos = new int[10]; // a posição 0 nunca será utilizada
+        portos = new int[numPortos];
+        Arrays.fill(portos,-1); // inicializa 'portos' com -1 ao invés de 0;
         size = altura*largura;
+        this.numPortos = numPortos;
     }
 
     /**
@@ -41,11 +45,11 @@ public class Grafo {
      */
     public int[] bfsDisPortos(int start){
         int [] distancias = bfsDisTotal(start); // a distância de 'start' a todos os vértices alcançáveis
-        int [] retorno = new int[10]; // arrays de int inicializam com '0' em todas as posições
+        int [] retorno = new int[numPortos]; // arrays de int inicializam com '0' em todas as posições
         Arrays.fill(retorno,-1);
 
-        for (int i=1;i<10;i++){
-            retorno[i] = distancias[portos[i]]; // salva as distâncias certas no array
+        for (int i=1;i<numPortos;i++){
+            retorno[i] = distancias[portos[i-1]]; // salva as distâncias certas no array
         }
 
         return retorno;

@@ -36,14 +36,14 @@ public class Navegacao {
     }
 
     private void geraGrafo(char[][] matriz, int altura, int largura){
-        grafo = new Grafo(altura, largura); // inicializa o grafo
+        grafo = new Grafo(altura, largura, numPortos); // inicializa o grafo
         int v1;
         int v2;
 
         for(int i=0;i<altura;i++){
             for(int j=0;j<largura;j++){
                 if (matriz[i][j] != '*'){
-                    v1 = ((i * largura) + j); // posição do vérice atual no grafo
+                    v1 = ((i * largura) + j); // posição absoluta do vérice atual no mapa
 
                     if ((i>0) && (matriz[i-1][j] != '*')){ // verifica a posição de cima do vértice atual
                         v2 = (((i - 1) * largura)+ j);
@@ -67,7 +67,7 @@ public class Navegacao {
                     if (matriz[i][j] != '.'){ // verifica se o vértice em sí é um porto
                         // guara o valor númerico, pois 'matriz' armazena um char
                         int porto = Character.getNumericValue(matriz[i][j]);
-                        grafo.portos[porto] = v1;
+                        grafo.portos[porto-1] = v1;
                     }
                 }
             }
@@ -75,15 +75,15 @@ public class Navegacao {
     }
 
     private void responde(){
-        int aux;
+        int p2; // porto 2
         System.out.println("--------------------------RESPOSTA--------------------------");
-        for (int i=1;i<numPortos+1;i++){
-            int[] distancias = grafo.bfsDisPortos(grafo.portos[i]);
+        for (int i=1;i<=numPortos;i++){
+            int[] distancias = grafo.bfsDisPortos(grafo.portos[i-1]);
             System.out.print("A viagem entre ");
-            aux = calcProx(distancias,i);
-            System.out.print("Porto " + i + " e Porto " + aux);
-            System.out.println( " custará " + distancias[aux] + " Unidades de combustivel");
-            if (aux == 1){
+            p2 = calcProx(distancias,i);
+            System.out.print("Porto " + i + " e Porto " + p2);
+            System.out.println( " custará " + distancias[p2] + " Unidades de combustivel");
+            if (p2 == 1){
                 break;
             }
         }
