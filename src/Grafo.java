@@ -49,7 +49,7 @@ public class Grafo {
         Arrays.fill(retorno,-1);
 
         for (int i=1;i<numPortos;i++){
-            retorno[i] = distancias[portos[i-1]]; // salva as distâncias certas no array
+            retorno[i-1] = distancias[portos[i-1]]; // salva as distâncias certas no array
         }
 
         return retorno;

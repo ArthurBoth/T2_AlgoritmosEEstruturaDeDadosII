@@ -36,7 +36,7 @@ public class Navegacao {
     }
 
     private void geraGrafo(char[][] matriz, int altura, int largura){
-        grafo = new Grafo(altura, largura, numPortos); // inicializa o grafo
+        grafo = new Grafo(altura, largura, numPortos+1); // inicializa o grafo
         int v1;
         int v2;
 
@@ -76,18 +76,20 @@ public class Navegacao {
 
     private void responde(){
         int p2; // porto 2
-        System.out.println("--------------------------RESPOSTA--------------------------");
-        for (int i=1;i<=numPortos;i++){
+        System.out.println("-------------------------------RESPOSTA-------------------------------");
+        for (int i=1;i<=numPortos+1;i++){
             int[] distancias = grafo.bfsDisPortos(grafo.portos[i-1]);
-            System.out.print("A viagem entre ");
             p2 = calcProx(distancias,i);
-            System.out.print("Porto " + i + " e Porto " + p2);
-            System.out.println( " custará " + distancias[p2] + " Unidades de combustivel");
-            if (p2 == 1){
-                break;
+            if (distancias[p2] > 0){
+                System.out.print("A viagem entre ");
+                System.out.printf("Porto %d e Porto %d",i,p2+1);
+                System.out.printf(" custará %d Unidades de combustível\n",distancias[p2]);
+                if (p2 == 0){
+                    break;
+                }
             }
         }
-        System.out.println("--------------------------RESPOSTA--------------------------");
+        System.out.println("-------------------------------RESPOSTA-------------------------------");
     }
 
     /**
@@ -97,14 +99,13 @@ public class Navegacao {
      * @return o número do próximo porto alcançável
      */
     private int calcProx(int[] distancias, int start){
-        for (int i=1;i<numPortos;i++){
-            if (distancias[((start+i)%numPortos)] != -1){
-                return (((start+i)%numPortos));
+        for (int i=0;i<numPortos;i++){
+            if (distancias[((start+i)%(numPortos))] != -1){
+                return ((start+i)%(numPortos));
             }
         }
         return -1;
     }
-
 
     private void debugPrintMap(char[][] matriz){
         System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
