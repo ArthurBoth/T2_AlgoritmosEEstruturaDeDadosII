@@ -98,6 +98,10 @@ public class Grafo {
             l.append("]");
             s.append("Posição: ").append(i).append(" - Lista: ").append(l).append("\n");
         }
+        s.append("\n");
+        for (int i=0;i<portos.length;i++){
+            s.append("Porto: ").append(i+1).append(" - Posição: ").append(portos[i]).append("\n");
+        }
 
         s.append("\nNúmero de Vértices: ").append(lista.size());
         return s.toString();
