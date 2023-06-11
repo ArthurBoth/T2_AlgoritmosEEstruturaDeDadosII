@@ -81,15 +81,13 @@ public class Navegacao {
         for (int i=1;i<numPortos+1;i++){
             int[] distancias = grafo.bfsDisPortos(grafo.portos[i-1]);
             p2 = calcProx(distancias,i);
-            if (distancias[p2] > -1){
-                if (distancias[p2] > 0){
-                    System.out.print("A viagem entre ");
-                    System.out.printf("Porto %d e Porto %d",i,p2+1);
-                    System.out.printf(" custará %d Unidades de combustível\n",distancias[p2]);
-                    cTotal += distancias[p2];
-                } else {
-                    System.out.printf("O Porto %d é inacessível\n",i);
-                }
+            if ((distancias[p2] > 0) || (distancias[p2] == 0) && (p2 == 0)){
+                System.out.print("A viagem entre ");
+                System.out.printf("Porto %d e Porto %d",i,p2+1);
+                System.out.printf(" custará %d Unidades de combustível\n",distancias[p2]);
+                cTotal += distancias[p2];
+            } else {
+                System.out.printf("O Porto %d é inacessível\n",i);
             }
         }
         System.out.printf("\nCombustível total: %d\n",cTotal);
