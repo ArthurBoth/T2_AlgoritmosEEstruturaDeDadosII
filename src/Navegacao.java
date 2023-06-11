@@ -3,7 +3,6 @@ import java.nio.charset.Charset;
 import java.nio.file.*;
 
 public class Navegacao {
-    private final int numPortos = 9; // o número de portos que o mapa tem
     Grafo grafo;
     public Navegacao() {
     }
@@ -26,9 +25,6 @@ public class Navegacao {
                 matriz[i] = line.toCharArray();
             }
             geraGrafo(matriz,altura,largura);
-            // debugPrintMap(matriz); // imprime o Mapa lido
-            // debugPrintGraph(); // imprime o Grafo gerado
-            // debugPrintPositions(altura,largura); // imprime as posiçoes de cada elemento do mapa
         }
         catch (IOException e) {
             System.err.format("Erro");
@@ -36,7 +32,7 @@ public class Navegacao {
     }
 
     private void geraGrafo(char[][] matriz, int altura, int largura){
-        grafo = new Grafo(altura, largura, numPortos+1); // inicializa o grafo
+        grafo = new Grafo(altura, largura); // inicializa o grafo
         int v1;
         int v2;
 
@@ -78,18 +74,16 @@ public class Navegacao {
         int p2; // porto 2
         int cTotal = 0; // combustível total
         System.out.println("-------------------------------RESPOSTA-------------------------------");
-        for (int i=1;i<numPortos+1;i++){
+        for (int i=1;i<10;i++){
             int[] distancias = grafo.bfsDisPortos(grafo.portos[i-1]);
             p2 = calcProx(distancias,i);
-            if (distancias[p2] > -1){
-                if (distancias[p2] > 0){
-                    System.out.print("A viagem entre ");
-                    System.out.printf("Porto %d e Porto %d",i,p2+1);
-                    System.out.printf(" custará %d Unidades de combustível\n",distancias[p2]);
-                    cTotal += distancias[p2];
-                } else {
-                    System.out.printf("O Porto %d é inacessível\n",i);
-                }
+            if ((distancias[p2] > 0) || (distancias[p2] == 0) && (p2 == 0)){
+                System.out.print("A viagem entre ");
+                System.out.printf("Porto %d e Porto %d",i,p2+1);
+                System.out.printf(" custará %d Unidades de combustível\n",distancias[p2]);
+                cTotal += distancias[p2];
+            } else {
+                System.out.printf("O Porto %d é inacessível\n",i);
             }
         }
         System.out.printf("\nCombustível total: %d\n",cTotal);
@@ -103,38 +97,12 @@ public class Navegacao {
      * @return o número do próximo porto alcançável
      */
     private int calcProx(int[] distancias, int start){
-        for (int i=0;i<numPortos;i++){
-            if (distancias[((start+i)%(numPortos))] != -1){
-                return ((start+i)%(numPortos));
+        for (int i=0;i<9;i++){
+            if (distancias[((start+i)%(9))] != -1){
+                return ((start+i)%(9));
             }
         }
         return -1;
-    }
-
-    private void debugPrintMap(char[][] matriz){
-        System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
-        for (char[] i: matriz){
-            for (char j : i){
-                System.out.print(j);
-            }
-            System.out.print("\n");
-        }
-        System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
-    }
-    private void debugPrintGraph(){
-        System.out.println("--------------------------DEBUG - PRINT - GRAFO-------------------------");
-        System.out.println(grafo.toString());
-        System.out.println("--------------------------DEBUG - PRINT - GRAFO-------------------------");
-    }
-    private void debugPrintPositions(int altura, int largura){
-        System.out.println("--------------------------DEBUG - PRINT - POSIÇÕES----------------------");
-        for (int i=0;i<altura;i++){
-            for (int j=0;j<largura;j++){
-                System.out.print((i*largura+j) + " ");
-            }
-            System.out.print("\n");
-        }
-        System.out.println("--------------------------DEBUG - PRINT - POSIÇÕES----------------------");
     }
 }
 
