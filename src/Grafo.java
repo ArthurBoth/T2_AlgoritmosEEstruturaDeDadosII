@@ -6,10 +6,10 @@ public class Grafo {
     public final int[] portos; // guarda a posição dos portos no mapa
 
     public Grafo(int altura, int largura){
-        lista = new HashMap<>();
-        portos = new int[10];
-        Arrays.fill(portos,-1); // inicializa 'portos' com -1 ao invés de 0;
         size = altura*largura;
+        lista = new HashMap<>();
+        portos = new int[9];
+        Arrays.fill(portos,-1); // inicializa 'portos' com -1 ao invés de 0;
     }
 
     /**
@@ -42,7 +42,7 @@ public class Grafo {
      */
     public int[] bfsDisPortos(int start){
         int [] distancias = bfsDisTotal(start); // a distância de 'start' a todos os vértices alcançáveis
-        int [] retorno = new int[10]; // arrays de int inicializam com '0' em todas as posições
+        int [] retorno = new int[9]; // arrays de int inicializam com '0' em todas as posições
         Arrays.fill(retorno,-1);
 
         for (int i=1;i<10;i++){
