@@ -36,7 +36,7 @@ public class Navegacao {
     }
 
     private void geraGrafo(char[][] matriz, int altura, int largura){
-        grafo = new Grafo(altura, largura, numPortos+1); // inicializa o grafo
+        grafo = new Grafo(altura, largura, numPortos); // inicializa o grafo
         int v1;
         int v2;
 
