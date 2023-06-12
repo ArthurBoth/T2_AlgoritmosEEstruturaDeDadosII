@@ -1,18 +1,15 @@
 import java.util.*;
 
 public class Grafo {
-
-    private final int numPortos;
-    private final int size; // armazena o tamanho do mapa
+    private final int maxSize; // armazena o tamanho do mapa
     private final HashMap<Integer, List<Integer>> lista; // lista de adjacências
     public final int[] portos; // guarda a posição dos portos no mapa
 
-    public Grafo(int altura, int largura, int numPortos){
+    public Grafo(int altura, int largura){
+        maxSize = altura*largura;
         lista = new HashMap<>();
-        portos = new int[numPortos];
+        portos = new int[9];
         Arrays.fill(portos,-1); // inicializa 'portos' com -1 ao invés de 0;
-        size = altura*largura;
-        this.numPortos = numPortos;
     }
 
     /**
@@ -45,9 +42,8 @@ public class Grafo {
      */
     public int[] bfsDisPortos(int start){
         int [] distancias = bfsDisTotal(start); // a distância de 'start' a todos os vértices alcançáveis
-        int [] retorno = new int[numPortos]; // arrays de int inicializam com '0' em todas as posições
+        int [] retorno = new int[9]; // arrays de int inicializam com '0' em todas as posições
         Arrays.fill(retorno,-1);
-
         for (int i=0;i<numPortos;i++){
             retorno[i] = distancias[portos[i]]; // salva as distâncias certas no array
         }
@@ -61,8 +57,8 @@ public class Grafo {
      * @return é um array com todas as distâncias do vértice inicial
      */
     private int[] bfsDisTotal(int start){
-        boolean[] visitado = new boolean[size]; // arrays de boolean se inicializam com false
-        int[] distancia = new int[size]; // distância para cada um dos portos
+        boolean[] visitado = new boolean[maxSize]; // arrays de boolean se inicializam com false
+        int[] distancia = new int[maxSize]; // distância para cada um dos portos
         Queue<Integer> fila = new LinkedList<>();
 
          // altera a distância para um número inválido, assim, vértices inalcançáveis têm distância '-1'
@@ -83,27 +79,5 @@ public class Grafo {
             }
         }
         return distancia;
-    }
-
-    @Override
-    public String toString() {
-        List<Integer> aux;
-        StringBuilder s = new StringBuilder();
-        for (Integer i : lista.keySet()){
-            StringBuilder l= new StringBuilder("[ ");
-            aux = lista.get(i);
-            for (Integer j: aux){
-                l.append(j).append(" ");
-            }
-            l.append("]");
-            s.append("Posição: ").append(i).append(" - Lista: ").append(l).append("\n");
-        }
-        s.append("\n");
-        for (int i=0;i<portos.length;i++){
-            s.append("Porto: ").append(i+1).append(" - Posição: ").append(portos[i]).append("\n");
-        }
-
-        s.append("\nNúmero de Vértices: ").append(lista.size());
-        return s.toString();
     }
 }
