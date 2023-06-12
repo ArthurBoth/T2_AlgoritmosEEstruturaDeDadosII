@@ -48,7 +48,7 @@ public class Grafo {
         int [] retorno = new int[numPortos]; // arrays de int inicializam com '0' em todas as posições
         Arrays.fill(retorno,-1);
 
-        for (int i=0;i<numPortos-1;i++){
+        for (int i=0;i<numPortos;i++){
             retorno[i] = distancias[portos[i]]; // salva as distâncias certas no array
         }
 
