@@ -12,6 +12,10 @@ public class Navegacao {
         responde();
     }
 
+    /**
+     * Lê o arquivo com o mapa e envia as informações lidas para o método 'geraGrafo' para que o grafo seja criado
+     * @param arquivo é a String com o nome do arquivo
+     */
     private void prep(String arquivo){
 
         Path path = Paths.get(arquivo);
@@ -31,6 +35,12 @@ public class Navegacao {
         }
     }
 
+    /**
+     * Gera um grafo a partir de uma matriz de charcteres
+     * @param matriz é a matriz de 'char' que originará o grafo
+     * @param altura é o número de linhas da matriz
+     * @param largura é o número de colunas da matriz
+     */
     private void geraGrafo(char[][] matriz, int altura, int largura){
         grafo = new Grafo(altura, largura); // inicializa o grafo
         int v1;
@@ -70,6 +80,9 @@ public class Navegacao {
         }
     }
 
+    /**
+     * imprime na tela, com base nas informações do grafo, a distância entre os portos
+     */
     private void responde(){
         int p2; // porto 2
         int cTotal = 0; // combustível total
@@ -91,7 +104,7 @@ public class Navegacao {
     }
 
     /**
-     * retorna o número do próximo porto
+     * retorna o número do próximo porto de destino na viagem
      * @param distancias é o array que guarda as distâncias entre o porto atual e os outros
      * @param start é o número do porto atual
      * @return o número do próximo porto alcançável
