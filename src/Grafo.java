@@ -1,12 +1,12 @@
 import java.util.*;
 
 public class Grafo {
-    private final int size; // armazena o tamanho do mapa
+    private final int maxSize; // armazena o tamanho do mapa
     private final HashMap<Integer, List<Integer>> lista; // lista de adjacências
     public final int[] portos; // guarda a posição dos portos no mapa
 
     public Grafo(int altura, int largura){
-        size = altura*largura;
+        maxSize = altura*largura;
         lista = new HashMap<>();
         portos = new int[9];
         Arrays.fill(portos,-1); // inicializa 'portos' com -1 ao invés de 0;
@@ -44,8 +44,7 @@ public class Grafo {
         int [] distancias = bfsDisTotal(start); // a distância de 'start' a todos os vértices alcançáveis
         int [] retorno = new int[9]; // arrays de int inicializam com '0' em todas as posições
         Arrays.fill(retorno,-1);
-
-        for (int i=0;i<9;i++){
+        for (int i=0;i<numPortos;i++){
             retorno[i] = distancias[portos[i]]; // salva as distâncias certas no array
         }
 
@@ -58,8 +57,8 @@ public class Grafo {
      * @return é um array com todas as distâncias do vértice inicial
      */
     private int[] bfsDisTotal(int start){
-        boolean[] visitado = new boolean[size]; // arrays de boolean se inicializam com false
-        int[] distancia = new int[size]; // distância para cada um dos portos
+        boolean[] visitado = new boolean[maxSize]; // arrays de boolean se inicializam com false
+        int[] distancia = new int[maxSize]; // distância para cada um dos portos
         Queue<Integer> fila = new LinkedList<>();
 
          // altera a distância para um número inválido, assim, vértices inalcançáveis têm distância '-1'
