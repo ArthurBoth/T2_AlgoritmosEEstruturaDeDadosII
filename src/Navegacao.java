@@ -108,7 +108,7 @@ public class Navegacao {
         }
         count+=2;
         System.out.printf("\nCombustível total: %d\n",cTotal);
-        System.out.printf("Contagem de operações: %d",count);
+        System.out.printf("Contagem de operações: %d\n",count);
         System.out.println("-------------------------------RESPOSTA-------------------------------");
     }
 
