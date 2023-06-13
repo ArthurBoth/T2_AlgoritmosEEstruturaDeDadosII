@@ -3,6 +3,8 @@ import java.nio.charset.Charset;
 import java.nio.file.*;
 
 public class Navegacao {
+
+    private int count = 0;
     private final int numPortos = 9; // o número de portos que o mapa tem
     Grafo grafo;
     public Navegacao() {
@@ -24,8 +26,10 @@ public class Navegacao {
             for (int i = 0; i<altura; i++){
                 line = reader.readLine();
                 matriz[i] = line.toCharArray();
+                count+=2;
             }
             geraGrafo(matriz,altura,largura);
+            count+=5;
             // debugPrintMap(matriz); // imprime o Mapa lido
             // debugPrintGraph(); // imprime o Grafo gerado
             // debugPrintPositions(altura,largura); // imprime as posiçoes de cada elemento do mapa
@@ -37,6 +41,7 @@ public class Navegacao {
 
     private void geraGrafo(char[][] matriz, int altura, int largura){
         grafo = new Grafo(altura, largura, numPortos); // inicializa o grafo
+        count += grafo.count();
         int v1;
         int v2;
 
@@ -48,18 +53,22 @@ public class Navegacao {
                     if ((i>0) && (matriz[i-1][j] != '*')){ // verifica a posição de cima do vértice atual
                         v2 = (((i - 1) * largura)+ j);
                         grafo.addAdj(v1,v2);
+                        count+= 2 + grafo.count();
                     }
                     if ((i<altura-1) && (matriz[i+1][j] != '*')){ // verifica a posição de baixo do vértice atual
                         v2 = (((i + 1) * largura) + j);
                         grafo.addAdj(v1,v2);
+                        count+= 2 + grafo.count();
                     }
                     if ((j>0) && (matriz[i][j-1] != '*')){ // verifica a posição à esquerda do vértice atual
                         v2 = ((i * largura) + j - 1);
                         grafo.addAdj(v1,v2);
+                        count+= 2 + grafo.count();
                     }
                     if ((j<largura-1) && (matriz[i][j+1] != '*')){ // verifica a posição à direita do vértice atual
                         v2 = ((i * largura) + j + 1);
                         grafo.addAdj(v1,v2);
+                        count+= 2 + grafo.count();
                     }
 
 
@@ -68,10 +77,14 @@ public class Navegacao {
                         // guara o valor númerico, pois 'matriz' armazena um char
                         int porto = Character.getNumericValue(matriz[i][j]);
                         grafo.portos[porto-1] = v1;
+                        count+= 2;
                     }
+                    count+=6;
                 }
+                count++;
             }
         }
+        count+=2;
     }
 
     private void responde(){
@@ -80,17 +93,22 @@ public class Navegacao {
         System.out.println("-------------------------------RESPOSTA-------------------------------");
         for (int i=1;i<numPortos+1;i++){
             int[] distancias = grafo.bfsDisPortos(grafo.portos[i-1]);
+            count += grafo.count();
             p2 = calcProx(distancias,i);
             if ((distancias[p2] > 0) || (distancias[p2] == 0) && (p2 == 0)){
                 System.out.print("A viagem entre ");
                 System.out.printf("Porto %d e Porto %d",i,p2+1);
                 System.out.printf(" custará %d Unidades de combustível\n",distancias[p2]);
                 cTotal += distancias[p2];
+                count++;
             } else {
                 System.out.printf("O Porto %d é inacessível\n",i);
             }
+            count+=3;
         }
+        count+=2;
         System.out.printf("\nCombustível total: %d\n",cTotal);
+        System.out.printf("Contagem de operações: %d",count);
         System.out.println("-------------------------------RESPOSTA-------------------------------");
     }
 
@@ -103,9 +121,12 @@ public class Navegacao {
     private int calcProx(int[] distancias, int start){
         for (int i=0;i<numPortos;i++){
             if (distancias[((start+i)%(numPortos))] != -1){
+                count++;
                 return ((start+i)%(numPortos));
             }
+            count++;
         }
+        count++;
         return -1;
     }
 

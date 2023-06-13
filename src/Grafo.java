@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Grafo {
 
+    private int count =0;
     private final int numPortos;
     private final int size; // armazena o tamanho do mapa
     private final HashMap<Integer, List<Integer>> lista; // lista de adjacências
@@ -13,6 +14,7 @@ public class Grafo {
         Arrays.fill(portos,-1); // inicializa 'portos' com -1 ao invés de 0;
         size = altura*largura;
         this.numPortos = numPortos;
+        count +=4;
     }
 
     /**
@@ -25,11 +27,14 @@ public class Grafo {
         lista.computeIfAbsent(v1, k -> new ArrayList<>());
         if (!(lista.get(v1).contains(v2))){ // se a lista não tem v2, adiciona v2
             lista.get(v1).add(v2);
+            count++;
         }
         lista.computeIfAbsent(v2, k -> new ArrayList<>());
         if (!(lista.get(v2).contains(v1))){ // se a lista não tem v1, adiciona v1
             lista.get(v2).add(v1);
+            count++;
         }
+        count+=8;
         /*
         lista.computeIfAbsent(v1, k -> new ArrayList<>());
         é a mesma coisa que
@@ -50,8 +55,10 @@ public class Grafo {
 
         for (int i=0;i<numPortos;i++){
             retorno[i] = distancias[portos[i]]; // salva as distâncias certas no array
+            count++;
         }
 
+        count+=2;
         return retorno;
     }
 
@@ -79,10 +86,20 @@ public class Grafo {
                     fila.add(w); // adiciona à fila para visitar no futuro
                     visitado[w] = true;
                     distancia[w] = distancia[v] + 1;
+                    count+=3;
                 }
+                count++;
             }
+            count++;
         }
+        count+=6;
         return distancia;
+    }
+
+    public int count() {
+        int aux = count;
+        count = 0;
+        return aux;
     }
 
     @Override
