@@ -44,7 +44,7 @@ public class Grafo {
         int [] distancias = bfsDisTotal(start); // a distância de 'start' a todos os vértices alcançáveis
         int [] retorno = new int[9]; // arrays de int inicializam com '0' em todas as posições
         Arrays.fill(retorno,-1);
-        for (int i=0;i<numPortos;i++){
+        for (int i=0;i<9;i++){
             retorno[i] = distancias[portos[i]]; // salva as distâncias certas no array
         }
 

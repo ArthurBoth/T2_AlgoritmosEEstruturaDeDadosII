@@ -110,12 +110,12 @@ public class Navegacao {
      * @return o número do próximo porto alcançável
      */
     private int calcProx(int[] distancias, int start){
-        for (int i=0;i<9;i++){
+        for (int i=0;i<8;i++){
             if (distancias[((start+i)%(9))] != -1){
                 return ((start+i)%(9));
             }
         }
-        return -1;
+        return start;
     }
 }
 
