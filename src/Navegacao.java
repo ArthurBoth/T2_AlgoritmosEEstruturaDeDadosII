@@ -3,6 +3,7 @@ import java.nio.charset.Charset;
 import java.nio.file.*;
 
 public class Navegacao {
+    private final int numPortos = 9; // o número de portos que o mapa tem
     Grafo grafo;
     public Navegacao() {
     }
@@ -12,10 +13,6 @@ public class Navegacao {
         responde();
     }
 
-    /**
-     * Lê o arquivo com o mapa e envia as informações lidas para o método 'geraGrafo' para que o grafo seja criado
-     * @param arquivo é a String com o nome do arquivo
-     */
     private void prep(String arquivo){
 
         Path path = Paths.get(arquivo);
@@ -29,20 +26,17 @@ public class Navegacao {
                 matriz[i] = line.toCharArray();
             }
             geraGrafo(matriz,altura,largura);
+            // debugPrintMap(matriz); // imprime o Mapa lido
+            // debugPrintGraph(); // imprime o Grafo gerado
+            // debugPrintPositions(altura,largura); // imprime as posiçoes de cada elemento do mapa
         }
         catch (IOException e) {
             System.err.format("Erro");
         }
     }
 
-    /**
-     * Gera um grafo a partir de uma matriz de charcteres
-     * @param matriz é a matriz de 'char' que originará o grafo
-     * @param altura é o número de linhas da matriz
-     * @param largura é o número de colunas da matriz
-     */
     private void geraGrafo(char[][] matriz, int altura, int largura){
-        grafo = new Grafo(altura, largura); // inicializa o grafo
+        grafo = new Grafo(altura, largura, numPortos); // inicializa o grafo
         int v1;
         int v2;
 
@@ -80,14 +74,11 @@ public class Navegacao {
         }
     }
 
-    /**
-     * imprime na tela, com base nas informações do grafo, a distância entre os portos
-     */
     private void responde(){
         int p2; // porto 2
         int cTotal = 0; // combustível total
         System.out.println("-------------------------------RESPOSTA-------------------------------");
-        for (int i=1;i<10;i++){
+        for (int i=1;i<numPortos+1;i++){
             int[] distancias = grafo.bfsDisPortos(grafo.portos[i-1]);
             p2 = calcProx(distancias,i);
             if ((distancias[p2] > 0) || (distancias[p2] == 0) && (p2 == 0)){
@@ -104,18 +95,44 @@ public class Navegacao {
     }
 
     /**
-     * retorna o número do próximo porto de destino na viagem
+     * retorna o número do próximo porto
      * @param distancias é o array que guarda as distâncias entre o porto atual e os outros
      * @param start é o número do porto atual
      * @return o número do próximo porto alcançável
      */
     private int calcProx(int[] distancias, int start){
-        for (int i=0;i<9;i++){
-            if (distancias[((start+i)%(9))] != -1){
-                return ((start+i)%(9));
+        for (int i=0;i<numPortos;i++){
+            if (distancias[((start+i)%(numPortos))] != -1){
+                return ((start+i)%(numPortos));
             }
         }
         return -1;
+    }
+
+    private void debugPrintMap(char[][] matriz){
+        System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
+        for (char[] i: matriz){
+            for (char j : i){
+                System.out.print(j);
+            }
+            System.out.print("\n");
+        }
+        System.out.println("--------------------------DEBUG - PRINT - MAPA--------------------------");
+    }
+    private void debugPrintGraph(){
+        System.out.println("--------------------------DEBUG - PRINT - GRAFO-------------------------");
+        System.out.println(grafo.toString());
+        System.out.println("--------------------------DEBUG - PRINT - GRAFO-------------------------");
+    }
+    private void debugPrintPositions(int altura, int largura){
+        System.out.println("--------------------------DEBUG - PRINT - POSIÇÕES----------------------");
+        for (int i=0;i<altura;i++){
+            for (int j=0;j<largura;j++){
+                System.out.print((i*largura+j) + " ");
+            }
+            System.out.print("\n");
+        }
+        System.out.println("--------------------------DEBUG - PRINT - POSIÇÕES----------------------");
     }
 }
 
